@@ -5,9 +5,15 @@ class ModelController extends FController
     private $_model;
 
     // 定义已经确定使用的字段
-    private $_models = array('A01' => 'simpletext', 'A02' => 'datepicker', 'S11' =>
-    'text', 'S12' => 'textarea', 'S17' => 'radiolist', 'S18' => 'checkboxlist',
-        'S19' => 'dropdownlist', //'S17'=>'file',
+    private $_models = array(
+        'A01' => 'simpletext',
+        'A02' => 'datepicker',
+        'S11' => 'text',
+        'S12' => 'textarea',
+        'S17' => 'radiolist',
+        'S18' => 'checkboxlist',
+        'S19' => 'dropdownlist',
+        //'S17'=>'file',
         //'S18'=>'radio',
         //'S15'=>'password',
         /*
@@ -44,11 +50,26 @@ class ModelController extends FController
      */
     public function accessRules()
     {
-        return array(array('allow', 'actions' => array('main', 'leftmenu', 'edit',
-            'create', 'advancecreate', 'advancegeneration', 'update', 'preview', 'save', 'finish', 'myforms', 'lock', 'delete', 'loadfield',
-            'addfield', 'fieldupdaterender', 'test',), 'users' => array('@'),), array('allow',
-            'actions' => array('submit'), 'users' => array('*'),), array('deny', 'users' =>
-        array('*'),),);
+        return array(
+            array('allow',
+                'actions' => array(
+                    'main', 'leftmenu', 'edit',
+                    'create', 'advancecreate', 'advancegeneration',
+                    'update', 'preview', 'save',
+                    'finish', 'myforms', 'lock',
+                    'delete', 'loadfield',
+                    'addfield', 'fieldupdaterender', 'test'),
+                'users' => array('@')
+            ),
+            array(
+                'allow',
+                'actions' => array('submit'), 'users' => array('*')
+            ),
+            array('deny',
+                'users' =>
+                array('*')
+            )
+        );
     }
 
     /**
