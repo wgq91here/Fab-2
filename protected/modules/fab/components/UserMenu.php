@@ -11,11 +11,11 @@
  */
 class UserMenu extends Portlet
 {
-  public $profile; // profile is show;
+    public $profile; // profile is show;
 
     public function init()
     {
-        $this->title=CHtml::encode(Yii::app()->user->name);
+        $this->title = CHtml::encode(Yii::app()->user->name);
         parent::init();
     }
 

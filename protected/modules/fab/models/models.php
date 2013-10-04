@@ -2,20 +2,20 @@
 
 /**
  * models
- * 
+ *
  * @package 没有项目被加载
  * @author www.fabcms.com
  * @copyright 2010
  * @version $Id$
  * @access public
  */
- 
+
 class models extends CActiveRecord
 {
-  const PAGE_SIZE = 10;
-  const LOCK = 1;
-  const UNLOCK = 0;
-  
+    const PAGE_SIZE = 10;
+    const LOCK = 1;
+    const UNLOCK = 0;
+
     /**
      * The followings are the available columns in table 'models':
      * @var string $mid
@@ -44,18 +44,18 @@ class models extends CActiveRecord
 
     /**
      * models::Scope()
-     * 
+     *
      * @return array
      */
     public function scopes()
     {
-        return array('myforms' => array('condition' => $this->getTableAlias().'.userid=' . Yii::app()->user->id));
+        return array('myforms' => array('condition' => $this->getTableAlias() . '.userid=' . Yii::app()->user->id));
     }
 
 
     /**
      * models::rules()
-     * 
+     *
      * @return array
      */
     public function rules()
@@ -63,10 +63,10 @@ class models extends CActiveRecord
         // NOTE: you should only define rules for those attributes that
         // will receive user inputs.
         return array(
-          array('mid, userid, title, data, created', 'required'), 
-          array('userid, items', 'numerical', 'integerOnly' => true), 
-          array('title', 'length', 'min' => 4),
-          array('mid', 'length', 'max' => 20),
+            array('mid, userid, title, data, created', 'required'),
+            array('userid, items', 'numerical', 'integerOnly' => true),
+            array('title', 'length', 'min' => 4),
+            array('mid', 'length', 'max' => 20),
             // The following rule is used by search().
             // Please remove those attributes that should not be searched.
             // array('mid, created, userid, data', 'safe', 'on'=>'search'),
@@ -88,8 +88,8 @@ class models extends CActiveRecord
         // NOTE: you may need to adjust the relation name and the related
         // class name for the relations automatically generated below.
         return array(
-          'user'=>array(self::BELONGS_TO,'User','userid','select'=>'id as uid,username'),
-          'posts'=>array(self::HAS_MANY,'posts','mid','select'=>$this->getTableAlias().'.userid as model_userid,pid,created'),
+            'user' => array(self::BELONGS_TO, 'User', 'userid', 'select' => 'id as uid,username'),
+            'posts' => array(self::HAS_MANY, 'posts', 'mid', 'select' => $this->getTableAlias() . '.userid as model_userid,pid,created'),
         );
     }
 
@@ -99,16 +99,16 @@ class models extends CActiveRecord
     public function attributeLabels()
     {
         return array(
-          'title'=>'标题',
-          'locked'=>'状态',
-          'mid' => '编号', 
-          'items' => '记录数',
-          'created' => '建立日期', 
-          'userid' => '用户ID', 
-          'data' => '编码数据' );
+            'title' => '标题',
+            'locked' => '状态',
+            'mid' => '编号',
+            'items' => '记录数',
+            'created' => '建立日期',
+            'userid' => '用户ID',
+            'data' => '编码数据');
     }
-    
-   
+
+
     /**
      * Retrieves a list of models based on the current search/filter conditions.
      * @return CActiveDataProvider the data provider that can return the models based on the search/filter conditions.

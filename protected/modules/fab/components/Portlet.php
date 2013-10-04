@@ -12,12 +12,11 @@
 class Portlet extends CWidget
 {
     public $title; // the portlet title
-    public $visible=true; // whether the portlet is visible
+    public $visible = true; // whether the portlet is visible
 
     public function init()
     {
-        if($this->visible)
-        {
+        if ($this->visible) {
             // 开始渲染这个展示点
             // 渲染Title
         }
@@ -25,8 +24,7 @@ class Portlet extends CWidget
 
     public function run()
     {
-        if($this->visible)
-        {
+        if ($this->visible) {
             $this->renderContent();
             // 最终渲染这个视图
         }

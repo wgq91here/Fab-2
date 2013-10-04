@@ -107,315 +107,292 @@
 
 class Relation extends CWidget
 {
-	protected $_Model;
-	protected $_foreignModel;
-	public $model;
-	public $relation;
-	public $field;
-	public $foreignFieldPk;
-	public $fields;
-	public $allowEmpty;
-	public $emptyString = "None";
-	public $hideAddButton;
-	public $addButtonString = "+";
-	public $returnLink;
-	public $delimiter = " | ";
-	public $style = "SelectBox";
-	public $createAction = "create";
-	public $htmlOptions = array();
-	public $parentObjects = 0;
-	public $groupParentBy = 0;
-	public $manyManyTable = '';
-	public $manyManyTableLeft = '';
-	public $manyManyTableRight = '';
+    protected $_Model;
+    protected $_foreignModel;
+    public $model;
+    public $relation;
+    public $field;
+    public $foreignFieldPk;
+    public $fields;
+    public $allowEmpty;
+    public $emptyString = "None";
+    public $hideAddButton;
+    public $addButtonString = "+";
+    public $returnLink;
+    public $delimiter = " | ";
+    public $style = "SelectBox";
+    public $createAction = "create";
+    public $htmlOptions = array();
+    public $parentObjects = 0;
+    public $groupParentBy = 0;
+    public $manyManyTable = '';
+    public $manyManyTableLeft = '';
+    public $manyManyTableRight = '';
 
-	public function init()
-	{
-		if(!is_object($this->model)) 
-		{
-			if(!$this->_Model = new $this->model) 
-				throw new CException(Yii::t('yii','Widget "Relation" can not instantiate Model'));
-		} 
-		else 
-		{
-			$this->_Model = $this->model;
-		}
+    public function init()
+    {
+        if (!is_object($this->model)) {
+            if (!$this->_Model = new $this->model)
+                throw new CException(Yii::t('yii', 'Widget "Relation" can not instantiate Model'));
+        } else {
+            $this->_Model = $this->model;
+        }
 
-		// Instantiate Model and related Model
-		foreach($this->_Model->relations() as $key => $value) 
-		{
-			if(strcmp($this->relation,$key) == 0) 
-			{
-				// $key = Name of the Relation
-				// $value[0] = Type of the Relation
-				// $value[1] = Related Model
-				// $value[2] = Related Field or Many_Many Table
-				switch($value[0]) {
-				case 'CBelongsToRelation':
-				case 'CHasOneRelation':
-					$this->_foreignModel = new $value[1];
-					if(!isset($field)) 
-					{
-						$this->field = $value[2];
-					} 
-					break;
-				case 'CManyManyRelation':
-					preg_match_all('/^.*\(/', $value[2], $matches);
-					$this->manyManyTable = substr($matches[0][0], 0, strlen($matches[0][0]) -1);
-					preg_match_all('/\(.*,/', $value[2], $matches);
-					$this->manyManyTableLeft = substr($matches[0][0], 1, strlen($matches[0][0]) - 2);
-					preg_match_all('/,.*\)/', $value[2], $matches);
-					$this->manyManyTableRight = substr($matches[0][0], 2, strlen($matches[0][0]) - 3);
+        // Instantiate Model and related Model
+        foreach ($this->_Model->relations() as $key => $value) {
+            if (strcmp($this->relation, $key) == 0) {
+                // $key = Name of the Relation
+                // $value[0] = Type of the Relation
+                // $value[1] = Related Model
+                // $value[2] = Related Field or Many_Many Table
+                switch ($value[0]) {
+                    case 'CBelongsToRelation':
+                    case 'CHasOneRelation':
+                        $this->_foreignModel = new $value[1];
+                        if (!isset($field)) {
+                            $this->field = $value[2];
+                        }
+                        break;
+                    case 'CManyManyRelation':
+                        preg_match_all('/^.*\(/', $value[2], $matches);
+                        $this->manyManyTable = substr($matches[0][0], 0, strlen($matches[0][0]) - 1);
+                        preg_match_all('/\(.*,/', $value[2], $matches);
+                        $this->manyManyTableLeft = substr($matches[0][0], 1, strlen($matches[0][0]) - 2);
+                        preg_match_all('/,.*\)/', $value[2], $matches);
+                        $this->manyManyTableRight = substr($matches[0][0], 2, strlen($matches[0][0]) - 3);
 
-					$this->_foreignModel = new $value[1];
-					break;
-				}
-			}
-		}				
+                        $this->_foreignModel = new $value[1];
+                        break;
+                }
+            }
+        }
 
-		if(!is_object($this->_foreignModel))	
-			throw new CException(Yii::t('yii','Widget "Relation" can not find the given Relation('.$this->relation.')'));
+        if (!is_object($this->_foreignModel))
+            throw new CException(Yii::t('yii', 'Widget "Relation" can not find the given Relation(' . $this->relation . ')'));
 
-		if(!isset($this->foreignFieldPk) || $this->foreignFieldPk == "") 
-		{
-			$this->foreignFieldPk = $this->_foreignModel->tableSchema->primaryKey;
-		}
+        if (!isset($this->foreignFieldPk) || $this->foreignFieldPk == "") {
+            $this->foreignFieldPk = $this->_foreignModel->tableSchema->primaryKey;
+        }
 
-		if(!isset($this->fields) || $this->fields == "" || $this->fields == array())
-			throw new CException(Yii::t('yii','Widget "Relation" has been run without fields Option(string or array)'));
-	}
+        if (!isset($this->fields) || $this->fields == "" || $this->fields == array())
+            throw new CException(Yii::t('yii', 'Widget "Relation" has been run without fields Option(string or array)'));
+    }
 
-	// Check if model-value contains '.' and generate -> directives:
-	public function getModelData($model, $field) 
-	{
-		if(strstr($field, '.')) 
-		{
-			$data = explode('.', $field);
-			$value = $model->getRelated($data[0])->$data[1];
-		} else	
-			$value = $model->$field;
+    // Check if model-value contains '.' and generate -> directives:
+    public function getModelData($model, $field)
+    {
+        if (strstr($field, '.')) {
+            $data = explode('.', $field);
+            $value = $model->getRelated($data[0])->$data[1];
+        } else
+            $value = $model->$field;
 
-		return $value;
-	}
+        return $value;
+    }
 
-	public function getRelatedData() 
-	{
-		/* At first we determine, if we want to display all parent Objects, or
-		 * if the User supplied an list of Objects */
-		if(is_object($this->parentObjects)) 
-		{ // a single Element
-			$parentobjects = array($this->parentObjects);
-		}	
-		else if(is_array($this->parentObjects)) 
-		{ // Only show this elements
-			$parentobjects = $this->parentObjects;
-		} 
-		else 
-		{ // Show all Parent elements
-			$parentobjects = CActiveRecord::model(get_class($this->_foreignModel))->findAll();
-		} 
+    public function getRelatedData()
+    {
+        /* At first we determine, if we want to display all parent Objects, or
+         * if the User supplied an list of Objects */
+        if (is_object($this->parentObjects)) { // a single Element
+            $parentobjects = array($this->parentObjects);
+        } else if (is_array($this->parentObjects)) { // Only show this elements
+            $parentobjects = $this->parentObjects;
+        } else { // Show all Parent elements
+            $parentobjects = CActiveRecord::model(get_class($this->_foreignModel))->findAll();
+        }
 
-		if($this->allowEmpty)
-			$dataArray[0] = $this->emptyString;
+        if ($this->allowEmpty)
+            $dataArray[0] = $this->emptyString;
 
-		foreach($parentobjects as $obj)	{
-			if(is_string($this->fields)) 
-			{ // Display only 1 field:
-				$value = $this->getModelData($obj, $this->fields);
-			}
-			else if(is_array($this->fields)) 
-			{ // Display more than 1 field:
-				$value = '';
-				foreach($this->fields as $field) 
-				{
-					$value .= $this->getModelData($obj, $field) . $this->delimiter;
-				}
-			}
+        foreach ($parentobjects as $obj) {
+            if (is_string($this->fields)) { // Display only 1 field:
+                $value = $this->getModelData($obj, $this->fields);
+            } else if (is_array($this->fields)) { // Display more than 1 field:
+                $value = '';
+                foreach ($this->fields as $field) {
+                    $value .= $this->getModelData($obj, $field) . $this->delimiter;
+                }
+            }
 
-			if($this->groupParentBy != '') {
-				$dataArray[$obj->{$this->groupParentBy}][$obj->{$this->foreignFieldPk}] = $value;
-			} else {
-				$dataArray[$obj->{$this->foreignFieldPk}] = $value;
-			}	
-		}
-		if(!is_array($dataArray))
-			$dataArray = array();
+            if ($this->groupParentBy != '') {
+                $dataArray[$obj->{$this->groupParentBy}][$obj->{$this->foreignFieldPk}] = $value;
+            } else {
+                $dataArray[$obj->{$this->foreignFieldPk}] = $value;
+            }
+        }
+        if (!is_array($dataArray))
+            $dataArray = array();
 
-		return $dataArray;
-	}
+        return $dataArray;
+    }
 
 
-	/**
-	 * Retrieves the Assigned Objects of the MANY_MANY related Table
-	 */
-	public function getAssignedObjects() 
-	{
-		if(!$this->_Model->id)
-			return array();
+    /**
+     * Retrieves the Assigned Objects of the MANY_MANY related Table
+     */
+    public function getAssignedObjects()
+    {
+        if (!$this->_Model->id)
+            return array();
 
-		$sql = sprintf("select * from %s where %s = %s",
-			$this->manyManyTable,
-			$this->manyManyTableLeft,
-			$this->_Model->{$this->_Model->tableSchema->primaryKey});
+        $sql = sprintf("select * from %s where %s = %s",
+            $this->manyManyTable,
+            $this->manyManyTableLeft,
+            $this->_Model->{$this->_Model->tableSchema->primaryKey});
 
-		$result = Yii::app()->db->createCommand($sql)->queryAll();
+        $result = Yii::app()->db->createCommand($sql)->queryAll();
 
-		foreach($result as $foreignObject) {
-			$id = $foreignObject[$this->manyManyTableRight];
-			$objects[$id] = $this->_foreignModel->findByPk($id); 
-		}
+        foreach ($result as $foreignObject) {
+            $id = $foreignObject[$this->manyManyTableRight];
+            $objects[$id] = $this->_foreignModel->findByPk($id);
+        }
 
-		return $objects ? $objects : array();
-	}
+        return $objects ? $objects : array();
+    }
 
-	/**
-	 * Retrieves the not Assigned Objects of the MANY_MANY related Table
-	 * This is used in the two-pane style view.
-	 */
-	public function getNotAssignedObjects() 
-	{
-		foreach($this->getRelatedData() as $key => $value) 
-		{
-			if(!array_key_exists($key, $this->getAssignedObjects())) 
-			{
-				$objects[$key] = $this->_foreignModel->findByPk($key);
-			}
-		}
+    /**
+     * Retrieves the not Assigned Objects of the MANY_MANY related Table
+     * This is used in the two-pane style view.
+     */
+    public function getNotAssignedObjects()
+    {
+        foreach ($this->getRelatedData() as $key => $value) {
+            if (!array_key_exists($key, $this->getAssignedObjects())) {
+                $objects[$key] = $this->_foreignModel->findByPk($key);
+            }
+        }
 
-		return $objects ? $objects : array();
-	}
+        return $objects ? $objects : array();
+    }
 
-	/**
-	 * Gets the Values of the given Object or Objects depending on the
-	 * $this->fields the widget requests
-	 */
-	public function	getObjectValues($objects)
-	{
-		if(is_array($objects)) { 
-			foreach($objects as $object) 
-			{
-				$attributeValues[$object->primaryKey] = $object->{$this->fields};
-			}
-		}
-		else if(is_object($objects)) 
-		{
-			$attributeValues[$object->primaryKey] = $objects->{$this->fields};
-		}
+    /**
+     * Gets the Values of the given Object or Objects depending on the
+     * $this->fields the widget requests
+     */
+    public function    getObjectValues($objects)
+    {
+        if (is_array($objects)) {
+            foreach ($objects as $object) {
+                $attributeValues[$object->primaryKey] = $object->{$this->fields};
+            }
+        } else if (is_object($objects)) {
+            $attributeValues[$object->primaryKey] = $objects->{$this->fields};
+        }
 
-		return $attributeValues ? $attributeValues : array();
-	}
+        return $attributeValues ? $attributeValues : array();
+    }
 
-	/*
-	 * How should the Listbox of the MANY_MANY Assignment be called? 
-	 */
-	public function getListBoxName($ajax = false) 
-	{
-		if($ajax) 
-		{
-			return	sprintf('%s_%s',
-				get_class($this->_Model),
-				get_class($this->_foreignModel)
-			);  
+    /*
+     * How should the Listbox of the MANY_MANY Assignment be called?
+     */
+    public function getListBoxName($ajax = false)
+    {
+        if ($ajax) {
+            return sprintf('%s_%s',
+                get_class($this->_Model),
+                get_class($this->_foreignModel)
+            );
 
-		}
-		else 
-		{
-			return	sprintf('%s[%s]',
-				get_class($this->_Model),
-				get_class($this->_foreignModel)
-			);  
-		}
-	}
+        } else {
+            return sprintf('%s[%s]',
+                get_class($this->_Model),
+                get_class($this->_foreignModel)
+            );
+        }
+    }
 
-	public function renderBelongsToSelection() {
-		if($this->style == "SelectBox") 
-			echo CHtml::ActiveDropDownList($this->_Model, 
-			$this->field, 
-			$this->getRelatedData(), 
-			$this->htmlOptions);
-		else if($this->style == "ListBox") 
-			echo CHtml::ActiveListBox($this->_Model, 
-			$this->field, 
-			$this->getRelatedData(), 
-			$this->htmlOptions);
-	}
+    public function renderBelongsToSelection()
+    {
+        if ($this->style == "SelectBox")
+            echo CHtml::ActiveDropDownList($this->_Model,
+                $this->field,
+                $this->getRelatedData(),
+                $this->htmlOptions);
+        else if ($this->style == "ListBox")
+            echo CHtml::ActiveListBox($this->_Model,
+                $this->field,
+                $this->getRelatedData(),
+                $this->htmlOptions);
+    }
 
-	public function renderManyManySelection() {
-		if($this->style == 'twopane') 
-			$this->renderTwoPaneSelection();
-		else
-			$this->renderOnePaneSelection();
-	}
+    public function renderManyManySelection()
+    {
+        if ($this->style == 'twopane')
+            $this->renderTwoPaneSelection();
+        else
+            $this->renderOnePaneSelection();
+    }
 
 
-	public function renderOnePaneSelection() 
-	{
-		$keys =	array_keys($this->getAssignedObjects());
+    public function renderOnePaneSelection()
+    {
+        $keys = array_keys($this->getAssignedObjects());
 
-		echo CHtml::ListBox($this->getListBoxName(), 
-					$keys,
-					$this->getRelatedData(),
-					array('multiple' => 'multiple'));
-	}
+        echo CHtml::ListBox($this->getListBoxName(),
+            $keys,
+            $this->getRelatedData(),
+            array('multiple' => 'multiple'));
+    }
 
-	public function handleAjaxRequest($_POST) {
-		print_r($_POST);
-	}
+    public function handleAjaxRequest($_POST)
+    {
+        print_r($_POST);
+    }
 
-	public function renderTwoPaneSelection() 
-	{
-		echo CHtml::ListBox($this->getListBoxName(),
-			array(),
-			$this->getObjectValues($this->getAssignedObjects()),
-			array('multiple' => 'multiple'));
+    public function renderTwoPaneSelection()
+    {
+        echo CHtml::ListBox($this->getListBoxName(),
+            array(),
+            $this->getObjectValues($this->getAssignedObjects()),
+            array('multiple' => 'multiple'));
 
-		$ajax =
-			array(
-				'type'=>'POST',
-				'data'=>array('yeah'),
-				'update'=>'#' . $this->getListBoxName(true),
-			);
+        $ajax =
+            array(
+                'type' => 'POST',
+                'data' => array('yeah'),
+                'update' => '#' . $this->getListBoxName(true),
+            );
 
-		echo CHtml::ajaxSubmitButton('<<',
-			array('assign'),
-			$ajax
-		);
+        echo CHtml::ajaxSubmitButton('<<',
+            array('assign'),
+            $ajax
+        );
 
-		$ajax =
-			array(
-				'type'=>'POST',
-				'update'=>'#not_'.$this->getListBoxName(true)
-			);
+        $ajax =
+            array(
+                'type' => 'POST',
+                'update' => '#not_' . $this->getListBoxName(true)
+            );
 
-		echo  CHtml::ajaxSubmitButton('>>',
-			array('assign','revoke'=>1),
-			$ajax,
-			$data['revoke']); 
+        echo CHtml::ajaxSubmitButton('>>',
+            array('assign', 'revoke' => 1),
+            $ajax,
+            $data['revoke']);
 
 
-		echo CHtml::ListBox('not_' . $this->getListBoxName(),
-			array(),
-			$this->getObjectValues($this->getNotAssignedObjects()), 
-			array('multiple' => 'multiple'));
+        echo CHtml::ListBox('not_' . $this->getListBoxName(),
+            array(),
+            $this->getObjectValues($this->getNotAssignedObjects()),
+            array('multiple' => 'multiple'));
 
-	}
+    }
 
-	public function run()
-	{
-		if($this->manyManyTable != '')
-			$this->renderManyManySelection();
-		else
-			$this->renderBelongsToSelection();
+    public function run()
+    {
+        if ($this->manyManyTable != '')
+            $this->renderManyManySelection();
+        else
+            $this->renderBelongsToSelection();
 
-		if(!$this->hideAddButton) 
-		{
-			if(!isset($this->returnLink) or $this->returnLink == "")
-				$this->returnLink = $this->model->tableSchema->name . "/create";
+        if (!$this->hideAddButton) {
+            if (!isset($this->returnLink) or $this->returnLink == "")
+                $this->returnLink = $this->model->tableSchema->name . "/create";
 
-			echo CHtml::Link($this->addButtonString, array(
-				$this->_foreignModel->tableSchema->name . "/" . $this->createAction, 
-				'returnTo' => $this->returnLink)); 
-		}
-	}
+            echo CHtml::Link($this->addButtonString, array(
+                $this->_foreignModel->tableSchema->name . "/" . $this->createAction,
+                'returnTo' => $this->returnLink));
+        }
+    }
 
 }

@@ -10,32 +10,37 @@
 
 class FMongoDB
 {
-	var $CONNECTION;
-	var $HOST = "localhost";
-	var $DB;
+    var $CONNECTION;
+    var $HOST = "localhost";
+    var $DB;
 
-	function FMongoDB() {
-		//$this->_connection();
-	}
+    function FMongoDB()
+    {
+        //$this->_connection();
+    }
 
-	function _connection() {
-		$this->CONNECTION = new Mongo($this->HOST); 
-	}
+    function _connection()
+    {
+        $this->CONNECTION = new Mongo($this->HOST);
+    }
 
-	function dbname($name) {
-		$this->_connection();
-		$this->DB = $this->CONNECTION->$name;
-		return $this->DB;
-	}
+    function dbname($name)
+    {
+        $this->_connection();
+        $this->DB = $this->CONNECTION->$name;
+        return $this->DB;
+    }
 
-	function getValue($dbname,$key) {
-		return $this->dbname($dbname)->$key;
-	}
+    function getValue($dbname, $key)
+    {
+        return $this->dbname($dbname)->$key;
+    }
 
-	function setValue($dbname,$key, $value) {
-		$collection = $this->dbname($dbname)->$key;
-		var_dump($collection);
-		var_dump($value);
-		return $collection->insert($value);
-	}
+    function setValue($dbname, $key, $value)
+    {
+        $collection = $this->dbname($dbname)->$key;
+        var_dump($collection);
+        var_dump($value);
+        return $collection->insert($value);
+    }
 }

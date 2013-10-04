@@ -3,37 +3,35 @@
 
 class InstallController extends CController
 {
-	public $menu = array();
+    public $menu = array();
 
-	public function actionInstall() 
-	{
-		if($this->module->debug) 
-		{
-			if(Yii::app()->request->isPostRequest) 
-			{
-				if($db = Yii::app()->db) {
-						$transaction = $db->beginTransaction();
+    public function actionInstall()
+    {
+        if ($this->module->debug) {
+            if (Yii::app()->request->isPostRequest) {
+                if ($db = Yii::app()->db) {
+                    $transaction = $db->beginTransaction();
 
-						$usersTable = $_POST['usersTable'];
-						$messagesTable = $_POST['messagesTable'];
-						$profileFieldsTable = $_POST['profileFieldsTable'];
-						$profileTable = $_POST['profileTable'];
-						$rolesTable = $_POST['rolesTable'];
-						$userRoleTable = $_POST['userRoleTable'];
+                    $usersTable = $_POST['usersTable'];
+                    $messagesTable = $_POST['messagesTable'];
+                    $profileFieldsTable = $_POST['profileFieldsTable'];
+                    $profileTable = $_POST['profileTable'];
+                    $rolesTable = $_POST['rolesTable'];
+                    $userRoleTable = $_POST['userRoleTable'];
 
-						// Clean up existing Installation
-						$db->createCommand(sprintf('drop table if exists %s, %s, %s, %s, %s, %s',
-									$usersTable,
-									$messagesTable, 
-									$profileFieldsTable, 
-									$profileTable,
-									$rolesTable,
-									$userRoleTable
-									)
-								)->execute();
+                    // Clean up existing Installation
+                    $db->createCommand(sprintf('drop table if exists %s, %s, %s, %s, %s, %s',
+                            $usersTable,
+                            $messagesTable,
+                            $profileFieldsTable,
+                            $profileTable,
+                            $rolesTable,
+                            $userRoleTable
+                        )
+                    )->execute();
 
-						// Create User Table
-						$sql = "CREATE TABLE IF NOT EXISTS `" . $usersTable . "` (
+                    // Create User Table
+                    $sql = "CREATE TABLE IF NOT EXISTS `" . $usersTable . "` (
 							`id` int(11) NOT NULL auto_increment,
 							`username` varchar(20) NOT NULL,
 							`password` varchar(128) NOT NULL,
@@ -51,10 +49,10 @@ class InstallController extends CController
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;";
 
 
-						$db->createCommand($sql)->execute();
+                    $db->createCommand($sql)->execute();
 
-						// Create Messages Table
-						$sql = "
+                    // Create Messages Table
+                    $sql = "
 							CREATE TABLE IF NOT EXISTS `" . $messagesTable . "` (
 								`id` int(11) NOT NULL auto_increment,
 								`from_user_id` int(11) NOT NULL,
@@ -68,11 +66,11 @@ class InstallController extends CController
 								KEY `fk_messages_users1` (`to_user_id`)
 								) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;";
 
-						$db->createCommand($sql)->execute();
+                    $db->createCommand($sql)->execute();
 
 
-						// Create Profile Fields Table
-						$sql = "CREATE TABLE IF NOT EXISTS `" . $profileFieldsTable . "` (
+                    // Create Profile Fields Table
+                    $sql = "CREATE TABLE IF NOT EXISTS `" . $profileFieldsTable . "` (
 							`id` int(10) NOT NULL auto_increment,
 							`varname` varchar(50) NOT NULL,
 							`title` varchar(255) NOT NULL,
@@ -91,11 +89,11 @@ class InstallController extends CController
 							KEY `varname` (`varname`,`visible`)
 							) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ; ";
 
-						$db->createCommand($sql)->execute();
+                    $db->createCommand($sql)->execute();
 
 
-						// Create Profiles Table
-						$sql = "CREATE TABLE IF NOT EXISTS `" . $profileTable . "` (
+                    // Create Profiles Table
+                    $sql = "CREATE TABLE IF NOT EXISTS `" . $profileTable . "` (
 							`profile_id` int(11) NOT NULL auto_increment,
 							`user_id` int(11) NOT NULL,
 							`lastname` varchar(50) NOT NULL default '',
@@ -106,61 +104,59 @@ class InstallController extends CController
 							KEY `fk_profiles_users` (`user_id`)
 							) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;";
 
-						$db->createCommand($sql)->execute();
+                    $db->createCommand($sql)->execute();
 
-						// Create Roles Table
-						$sql = "CREATE TABLE IF NOT EXISTS `".$rolesTable."` (
+                    // Create Roles Table
+                    $sql = "CREATE TABLE IF NOT EXISTS `" . $rolesTable . "` (
 							`id` INT NOT NULL AUTO_INCREMENT ,
 							`title` VARCHAR(255) NOT NULL ,
 							`description` VARCHAR(255) NULL ,
 							PRIMARY KEY (`id`)) 
 								ENGINE = InnoDB; ";
 
-						$db->createCommand($sql)->execute();
+                    $db->createCommand($sql)->execute();
 
-						// Create User_has_role Table
+                    // Create User_has_role Table
 
-						$sql = "CREATE TABLE IF NOT EXISTS `".$userRoleTable."` (
+                    $sql = "CREATE TABLE IF NOT EXISTS `" . $userRoleTable . "` (
 																		`id` int(11) NOT NULL auto_increment,
 																		`user_id` int(11) NOT NULL,
 																		`role_id` int(11) NOT NULL,
 																		PRIMARY KEY  (`id`)
 																		) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;";
 
-						$db->createCommand($sql)->execute();
+                    $db->createCommand($sql)->execute();
 
-						if($this->module->installDemoData) 
-						{
-							$sql = "INSERT INTO `".$usersTable."` (`id`, `username`, `password`, `email`, `activkey`, `createtime`, `lastvisit`, `superuser`, `status`) VALUES
+                    if ($this->module->installDemoData) {
+                        $sql = "INSERT INTO `" . $usersTable . "` (`id`, `username`, `password`, `email`, `activkey`, `createtime`, `lastvisit`, `superuser`, `status`) VALUES
 								(1, 'admin', '21232f297a57a5a743894a0e4a801fc3', 'webmaster@example.com', '', 0, 1266571424, 1, 1),
 (2, 'demo', 'fe01ce2a7fbac8fafaed7c982a04e229', 'demo@example.com', '', 0, 1266543330, 0, 1)";
-$db->createCommand($sql)->execute();
-							$sql = "INSERT INTO `".$profileTable."` (`profile_id`, `user_id`, `lastname`, `firstname`) VALUES
+                        $db->createCommand($sql)->execute();
+                        $sql = "INSERT INTO `" . $profileTable . "` (`profile_id`, `user_id`, `lastname`, `firstname`) VALUES
 								(1, 1, 'admin','admin'),
 								(2, 2, 'demo','demo')";
-$db->createCommand($sql)->execute();
+                        $db->createCommand($sql)->execute();
 
-						}
+                    }
 
-						// Do it
-						$transaction->commit();
+                    // Do it
+                    $transaction->commit();
 
-						// Victory
-						$this->render('success');
-				} else {
-					throw new CException(Yii::t('UserModule.user', 'Database Connection is not working'));	
-				}
-			}
-			else {
-				$this->render('start');
-			}
-		} else {
-			throw new CException(Yii::t('UserModule.user', 'User management Module is not in Debug Mode'));	
-		}
-	}
+                    // Victory
+                    $this->render('success');
+                } else {
+                    throw new CException(Yii::t('UserModule.user', 'Database Connection is not working'));
+                }
+            } else {
+                $this->render('start');
+            }
+        } else {
+            throw new CException(Yii::t('UserModule.user', 'User management Module is not in Debug Mode'));
+        }
+    }
 
-		public function actionIndex()
-		{
-			$this->actionInstall();
-		}
+    public function actionIndex()
+    {
+        $this->actionInstall();
+    }
 }

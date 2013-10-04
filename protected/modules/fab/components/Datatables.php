@@ -2,7 +2,7 @@
 
 /**
  * Datatables
- * 
+ *
  * @package fab
  * @author Fabcms wwwwgq
  * @copyright 2010
@@ -11,36 +11,36 @@
  */
 class Datatables extends CWidget
 {
-  var $ID;
-  var $data;
-  var $ajaxurl;
-  var $viewfile = 'default';
-  var $datatableDir;
-  
-  public function init()
-  {
-    $this->ID = Rand(100,999);
-		$assetDir = dirname(__FILE__).DIRECTORY_SEPARATOR.'Datatables'.DIRECTORY_SEPARATOR;
-    $cssDir = 'css'.DIRECTORY_SEPARATOR;
+    var $ID;
+    var $data;
+    var $ajaxurl;
+    var $viewfile = 'default';
+    var $datatableDir;
 
-		$cs = Yii::app()->getClientScript();
-		$am = Yii::app()->getAssetManager();
+    public function init()
+    {
+        $this->ID = Rand(100, 999);
+        $assetDir = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'Datatables' . DIRECTORY_SEPARATOR;
+        $cssDir = 'css' . DIRECTORY_SEPARATOR;
 
-    $this->datatableDir = $am->publish($assetDir);
-    $cs->registerCssFile($this->datatableDir.DIRECTORY_SEPARATOR.'css'.DIRECTORY_SEPARATOR.'demo_table.css');
-    $cs->registerCssFile($this->datatableDir.DIRECTORY_SEPARATOR.'css'.DIRECTORY_SEPARATOR.'demo_page.css');
-    //$cs->registerCssFile($this->datatableDir.DIRECTORY_SEPARATOR.'css'.DIRECTORY_SEPARATOR.'demo_table_jui.css');
-    
-    $cs->registerScriptFile($this->datatableDir.DIRECTORY_SEPARATOR.'js'.DIRECTORY_SEPARATOR.'jquery.dataTables.min.js');               
-  }
- 
-  public function run()
-  {
-    $_init_js = <<<EOF
+        $cs = Yii::app()->getClientScript();
+        $am = Yii::app()->getAssetManager();
+
+        $this->datatableDir = $am->publish($assetDir);
+        $cs->registerCssFile($this->datatableDir . DIRECTORY_SEPARATOR . 'css' . DIRECTORY_SEPARATOR . 'demo_table.css');
+        $cs->registerCssFile($this->datatableDir . DIRECTORY_SEPARATOR . 'css' . DIRECTORY_SEPARATOR . 'demo_page.css');
+        //$cs->registerCssFile($this->datatableDir.DIRECTORY_SEPARATOR.'css'.DIRECTORY_SEPARATOR.'demo_table_jui.css');
+
+        $cs->registerScriptFile($this->datatableDir . DIRECTORY_SEPARATOR . 'js' . DIRECTORY_SEPARATOR . 'jquery.dataTables.min.js');
+    }
+
+    public function run()
+    {
+        $_init_js = <<<EOF
 var oTable;
 EOF;
 
-		$_js_function = <<<EOF
+        $_js_function = <<<EOF
     
 			jQuery.fn.dataTableExt.oSort['numeric-comma-asc']  = function(a,b) {
 				var x = (a == "-") ? 0 : a.replace( /,/, "." );
@@ -95,12 +95,12 @@ EOF;
     $('#datatables{$this->ID}_wrapper').css('margin-top','16px');
     $('#datatables{$this->ID}_wrapper').css('margin-bottom','30px');
 EOF;
-		$cs = Yii::app()->getClientScript();
-    $cs->registerScript('Datatables'.$this->ID,$_init_js,CClientScript::POS_END);
-		$cs->registerScript('Datatables'.$this->ID,$_js_function,CClientScript::POS_READY);
-        
-    $this->render('dt_'.$this->viewfile, 
-      array('ID'=>$this->ID, 'data'=>$this->data, 'ajaxurl'=>$this->ajaxurl)
-      );
-  }
+        $cs = Yii::app()->getClientScript();
+        $cs->registerScript('Datatables' . $this->ID, $_init_js, CClientScript::POS_END);
+        $cs->registerScript('Datatables' . $this->ID, $_js_function, CClientScript::POS_READY);
+
+        $this->render('dt_' . $this->viewfile,
+            array('ID' => $this->ID, 'data' => $this->data, 'ajaxurl' => $this->ajaxurl)
+        );
+    }
 }

@@ -2,7 +2,7 @@
 
 /**
  * Datatables
- * 
+ *
  * @package fab
  * @author Fabcms wwwwgq
  * @copyright 2010
@@ -11,20 +11,20 @@
  */
 class Datatables_model extends Datatables
 {
-  var $ID;
-  var $data;
-  var $ajaxurl;
-  var $viewfile = 'default';
-  var $datatableDir;
-  
-  public function run()
-  {
-    $_init_js = <<<EOF
+    var $ID;
+    var $data;
+    var $ajaxurl;
+    var $viewfile = 'default';
+    var $datatableDir;
+
+    public function run()
+    {
+        $_init_js = <<<EOF
 var oTable;
 EOF;
-    $createFormUrl = CHtml::link('建立表单',Yii::app()->createurl("/fab/model/advancecreate"));
-    
-		$_js_function = <<<EOF
+        $createFormUrl = CHtml::link('建立表单', Yii::app()->createurl("/fab/model/advancecreate"));
+
+        $_js_function = <<<EOF
     
 			jQuery.fn.dataTableExt.oSort['numeric-comma-asc']  = function(a,b) {
 				var x = (a == "-") ? 0 : a.replace( /,/, "." );
@@ -80,12 +80,12 @@ EOF;
     $('#datatables{$this->ID}_wrapper').css('margin-top','16px');
     $('#datatables{$this->ID}_wrapper').css('margin-bottom','30px');
 EOF;
-		$cs = Yii::app()->getClientScript();
-    $cs->registerScript('Datatables'.$this->ID,$_init_js,CClientScript::POS_END);
-		$cs->registerScript('Datatables'.$this->ID,$_js_function,CClientScript::POS_READY);
-        
-    $this->render('dt_'.$this->viewfile, 
-      array('ID'=>$this->ID, 'data'=>$this->data, 'ajaxurl'=>$this->ajaxurl)
-      );
-  }
+        $cs = Yii::app()->getClientScript();
+        $cs->registerScript('Datatables' . $this->ID, $_init_js, CClientScript::POS_END);
+        $cs->registerScript('Datatables' . $this->ID, $_js_function, CClientScript::POS_READY);
+
+        $this->render('dt_' . $this->viewfile,
+            array('ID' => $this->ID, 'data' => $this->data, 'ajaxurl' => $this->ajaxurl)
+        );
+    }
 }

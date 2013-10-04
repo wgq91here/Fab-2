@@ -2,7 +2,7 @@
 
 /**
  * Datatables
- * 
+ *
  * @package fab
  * @author Fabcms wwwwgq
  * @copyright 2010
@@ -11,19 +11,19 @@
  */
 class Datatables_mypost extends Datatables
 {
-  var $ID;
-  var $data;
-  var $ajaxurl;
-  var $viewfile = 'default';
-  var $datatableDir;
-  
-  public function run()
-  {
-    $_init_js = <<<EOF
+    var $ID;
+    var $data;
+    var $ajaxurl;
+    var $viewfile = 'default';
+    var $datatableDir;
+
+    public function run()
+    {
+        $_init_js = <<<EOF
 var oTable;
 EOF;
-    
-		$_js_function = <<<EOF
+
+        $_js_function = <<<EOF
     oTable = $('#datatables{$this->ID}').dataTable({
     "bAutoWidth": false,
     "aaSorting": [[ 0, "desc" ]],
@@ -53,17 +53,17 @@ EOF;
     $('#datatables{$this->ID}_wrapper').css('margin-top','16px');
     $('#datatables{$this->ID}_wrapper').css('margin-bottom','30px');
 EOF;
-		$cs = Yii::app()->getClientScript();
-    $cs->registerScript('Datatables'.$this->ID,$_init_js,CClientScript::POS_END);
-		$cs->registerScript('Datatables'.$this->ID,$_js_function,CClientScript::POS_READY);
-        
-    $this->render(
-      'dt_mypost_'.$this->viewfile, 
-      array(
-        'ID'=>$this->ID, 
-        'data'=>$this->data,
-        'ajaxurl'=>$this->ajaxurl
-        )
-      );
-  }
+        $cs = Yii::app()->getClientScript();
+        $cs->registerScript('Datatables' . $this->ID, $_init_js, CClientScript::POS_END);
+        $cs->registerScript('Datatables' . $this->ID, $_js_function, CClientScript::POS_READY);
+
+        $this->render(
+            'dt_mypost_' . $this->viewfile,
+            array(
+                'ID' => $this->ID,
+                'data' => $this->data,
+                'ajaxurl' => $this->ajaxurl
+            )
+        );
+    }
 }

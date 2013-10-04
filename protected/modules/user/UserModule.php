@@ -2,32 +2,30 @@
 
 class UserModule extends CWebModule
 {
-	public $version = '0.2';
-	public $debug = true;
-	public $usersTable = "users";
-	public $messagesTable = "messages";
-	public $profileFieldsTable = "profile_fields";
-	public $profileTable = "profiles";
-	public $rolesTable = "roles";
-	public $userRoleTable = "user_has_role";
-	public $installDemoData = true;
-	public $layout = 'column2';
+    public $version = '0.2';
+    public $debug = true;
+    public $usersTable = "users";
+    public $messagesTable = "messages";
+    public $profileFieldsTable = "profile_fields";
+    public $profileTable = "profiles";
+    public $rolesTable = "roles";
+    public $userRoleTable = "user_has_role";
+    public $installDemoData = true;
+    public $layout = 'column2';
 
-	public function init()
-	{
-		$this->setImport(array(
-			'user.models.*',
-			'user.components.*',
-		));
-	}
+    public function init()
+    {
+        $this->setImport(array(
+            'user.models.*',
+            'user.components.*',
+        ));
+    }
 
-	public function beforeControllerAction($controller, $action)
-	{
-		if(parent::beforeControllerAction($controller, $action))
-		{
-			return true;
-		}
-		else
-			return false;
-	}
+    public function beforeControllerAction($controller, $action)
+    {
+        if (parent::beforeControllerAction($controller, $action)) {
+            return true;
+        } else
+            return false;
+    }
 }

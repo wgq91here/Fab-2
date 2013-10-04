@@ -51,7 +51,9 @@ function array_col_values(& $arr, $col)
 {
     $ret = array();
     foreach ($arr as $row) {
-        if (isset($row[$col])) { $ret[] = $row[$col]; }
+        if (isset($row[$col])) {
+            $ret[] = $row[$col];
+        }
     }
     return $ret;
 }
@@ -115,7 +117,7 @@ function array_group_by(& $arr, $keyField)
  * return array
  */
 function array_to_tree($arr, $fid, $fparent = 'parent_id',
-    $fchildrens = 'childrens', $returnReferences = false)
+                       $fchildrens = 'childrens', $returnReferences = false)
 {
     $pkvRefs = array();
     foreach ($arr as $offset => $row) {
@@ -126,7 +128,9 @@ function array_to_tree($arr, $fid, $fparent = 'parent_id',
     foreach ($arr as $offset => $row) {
         $parentId = $row[$fparent];
         if ($parentId) {
-            if (!isset($pkvRefs[$parentId])) { continue; }
+            if (!isset($pkvRefs[$parentId])) {
+                continue;
+            }
             $parent =& $pkvRefs[$parentId];
             $parent[$fchildrens][] =& $arr[$offset];
         } else {
@@ -193,21 +197,23 @@ function array_sortby_multifields($rowset, $args)
         }
         $sortRule .= '$sortArray[\'' . $sortField . '\'], ' . $sortDir . ', ';
     }
-    if (empty($sortArray) || empty($sortRule)) { return $rowset; }
+    if (empty($sortArray) || empty($sortRule)) {
+        return $rowset;
+    }
     eval('array_multisort(' . $sortRule . '$rowset);');
     return $rowset;
 }
 
 
-function object_to_array($mixed) {
-    if(is_object($mixed)) $mixed = (array) $mixed;
-    if(is_array($mixed)) {
+function object_to_array($mixed)
+{
+    if (is_object($mixed)) $mixed = (array)$mixed;
+    if (is_array($mixed)) {
         $new = array();
-        foreach($mixed as $key => $val) {
-            $key = preg_replace("/^\\0(.*)\\0/","",$key);
+        foreach ($mixed as $key => $val) {
+            $key = preg_replace("/^\\0(.*)\\0/", "", $key);
             $new[$key] = object_to_array($val);
         }
-    }
-    else $new = $mixed;
+    } else $new = $mixed;
     return $new;
 }

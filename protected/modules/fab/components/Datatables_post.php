@@ -2,7 +2,7 @@
 
 /**
  * Datatables
- * 
+ *
  * @package fab
  * @author Fabcms wwwwgq
  * @copyright 2010
@@ -11,24 +11,24 @@
  */
 class Datatables_post extends Datatables
 {
-  var $ID;
-  var $data;
-  var $fields;
-  var $ajaxurl;
-  var $viewfile = 'default';
-  var $datatableDir;
-  
-  var $fields_num = 3;
-  
-  public function run()
-  {
-    $firstRecord = current($this->data);
-    $ReLoadUrl = CHtml::button(Yii::t('FabModule.fab','Reload'),array('onclick'=>'history.go(0);'));
-    $EmptyFormButton = CHtml::button(Yii::t('FabModule.fab','Empty'),array('onclick'=>"EmptyFormData_{$this->ID}();"));
-    $EmptyFormUrl = Yii::app()->createurl('/fab/post/empty',array('id'=>$firstRecord['mid']));
-    $ExportExcelFormUrl = CHtml::button(Yii::t('FabModule.fab','Export Excel'),array('onclick'=>'window.open("'.Yii::app()->createurl('/fab/post/exportexcel',array('id'=>$firstRecord['mid'])).'");'));
+    var $ID;
+    var $data;
+    var $fields;
+    var $ajaxurl;
+    var $viewfile = 'default';
+    var $datatableDir;
 
-    $_init_js = <<<EOF
+    var $fields_num = 3;
+
+    public function run()
+    {
+        $firstRecord = current($this->data);
+        $ReLoadUrl = CHtml::button(Yii::t('FabModule.fab', 'Reload'), array('onclick' => 'history.go(0);'));
+        $EmptyFormButton = CHtml::button(Yii::t('FabModule.fab', 'Empty'), array('onclick' => "EmptyFormData_{$this->ID}();"));
+        $EmptyFormUrl = Yii::app()->createurl('/fab/post/empty', array('id' => $firstRecord['mid']));
+        $ExportExcelFormUrl = CHtml::button(Yii::t('FabModule.fab', 'Export Excel'), array('onclick' => 'window.open("' . Yii::app()->createurl('/fab/post/exportexcel', array('id' => $firstRecord['mid'])) . '");'));
+
+        $_init_js = <<<EOF
 var oTable;
     function EmptyFormData_{$this->ID}()
     {
@@ -50,8 +50,8 @@ var oTable;
       }
     }   
 EOF;
-    
-		$_js_function = <<<EOF
+
+        $_js_function = <<<EOF
     oTable = $('#datatables{$this->ID}').dataTable({
     "bAutoWidth": false,
     "aaSorting": [[ 0, "desc" ]],
@@ -83,18 +83,18 @@ EOF;
     
  
 EOF;
-		$cs = Yii::app()->getClientScript();
-    $cs->registerScript('Datatables'.$this->ID,$_init_js,CClientScript::POS_END);
-		$cs->registerScript('Datatables'.$this->ID,$_js_function,CClientScript::POS_READY);
-         
-    $this->render(
-      'dt_post_'.$this->viewfile, 
-      array(
-        'ID'=>$this->ID, 
-        'data'=>$this->data,
-        'fields'=>array_slice($this->fields,0,$this->fields_num), 
-        'ajaxurl'=>$this->ajaxurl
-        )
-      );
-  }
+        $cs = Yii::app()->getClientScript();
+        $cs->registerScript('Datatables' . $this->ID, $_init_js, CClientScript::POS_END);
+        $cs->registerScript('Datatables' . $this->ID, $_js_function, CClientScript::POS_READY);
+
+        $this->render(
+            'dt_post_' . $this->viewfile,
+            array(
+                'ID' => $this->ID,
+                'data' => $this->data,
+                'fields' => array_slice($this->fields, 0, $this->fields_num),
+                'ajaxurl' => $this->ajaxurl
+            )
+        );
+    }
 }
