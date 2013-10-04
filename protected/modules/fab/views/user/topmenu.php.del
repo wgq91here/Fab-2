@@ -1,0 +1,41 @@
+<table height="60" width="100%" cellspacing="0" style="border-bottom:3px #112233 solid;">
+<tr>
+	<td colspan="2" height="48" style="padding-left:55px;">
+		<div style="float: right;padding-right:20px;">欢迎, <?php echo Yii::app()->user->username; ?>&nbsp;&nbsp;
+			&nbsp;<a href="{:$_F['urlPath']}{:$_F['adminFilename']}/MySetting" target="content_iframe" style="color:white;">[设置]</a>
+			&nbsp;<a href="{:$_F['urlPath']}{:$_F['adminFilename']}/login/Logout" target="_top" style="color:white;">[退出]</a>
+		</div>
+		<span style="font-size:18px;"><B><?php echo CHtml::encode(Yii::app()->name); ?>&nbsp;-&nbsp;<?php echo Yii::app()->controller->module->siteName; ?></B></span>
+	</td>
+<TR>	
+	<td height="30" width="200" style="text-align:center;"><A HREF="#" onclick="self.parent.close_left_iframe(this);" id="sideswitch" class="closeside">关闭侧栏</A></td>
+	<TD>	
+
+<div id="topmenu">
+<ul>
+	<li id="selected_topmenu"><A HREF="{:$_F['urlPath']}{:$_F['adminFilename']}/menu/today" target="left_iframe">今日汇总</A></li>
+	{:loop $admin_menu $ename $menu}
+	<li id="no_selected_topmenu"><a href="{:$_F['urlPath']}{:$_F['adminFilename']}/menu/plugin/ename/{:$ename}" target="left_iframe">{:$menu['name']}</a></li>
+	{:/loop}
+	<li id="no_selected_topmenu"><A HREF="{:$_F['urlPath']}{:$_F['adminFilename']}/menu/base" target="left_iframe">系统设置</A></li>
+	<li id="no_selected_topmenu"><A HREF="{:$_F['urlPath']}{:$_F['adminFilename']}/menu/user" target="left_iframe">用户管理</A></li>
+</ul>
+</div>
+
+</TD>
+</TR>
+</TABLE>
+
+<SCRIPT LANGUAGE="JavaScript">
+	$("div li a").attr("target","left_iframe");
+
+	$("div li").bind("click", function() {
+		$("#selected_topmenu").attr("id","no_selected_topmenu");
+		this.id = "selected_topmenu";
+		return ;
+	});
+	$('body').addClass('body_topmenu');
+</SCRIPT>
+
+</BODY>
+</HTML>
